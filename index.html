@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Job Skill Analyser</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <h2 class="brand">✦ ResumeAI</h2>
+
+        <p class="menu-title">MAIN MENU</p>
+
+        <a href="/" class="nav-link active">▦ Dashboard</a>
+        <a href="#analyzer" class="nav-link">▤ Resume Analyzer</a>
+        <a href="#features" class="nav-link">✧ Skill Insights</a>
+        <a href="#about" class="nav-link">ⓘ About Project</a>
+
+        <div class="sidebar-footer">
+            <p>AI Resume Job Skill Analyser</p>
+            <small>College Project · Python Flask</small>
+        </div>
+
+    </div>
+
+    <!-- MAIN PAGE -->
+    <header>
+        <div class="logo">AI Resume Analyser</div>
+        <nav>Smart Career Assistant</nav>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+
+            <h1>AI Resume Job Skill Analyser</h1>
+
+            <p>
+                Analyse your resume, discover missing skills
+                and improve your job readiness.
+            </p>
+
+        </section>
+
+        <section class="upload-card" id="analyzer">
+
+            <h2>Analyse Your Resume</h2>
+
+            <p class="subtitle">
+                Upload your resume and enter your target job description.
+            </p>
+
+            {% if error %}
+                <div class="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form action="/analyze"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  id="resumeForm">
+
+                <label for="resume">
+                    Upload Resume (PDF)
+                </label>
+
+                <input type="file"
+                       id="resume"
+                       name="resume"
+                       accept=".pdf,application/pdf"
+                       required>
+
+                <label for="job_description">
+                    Enter Job Description
+                </label>
+
+                <textarea
+                    id="job_description"
+                    name="job_description"
+                    placeholder="Example: We require a Python developer with SQL, HTML, CSS and Machine Learning skills..."
+                    required></textarea>
+
+                <button type="submit" id="analyzeBtn">
+                    Analyse My Resume
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer>
+        AI Resume Job Skill Analyser | College Project
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

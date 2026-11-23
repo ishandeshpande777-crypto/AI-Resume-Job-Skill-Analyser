@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Analysis Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">AI Resume Analyser</div>
+    <nav>Smart Career Assistant</nav>
+</header>
+
+<main class="container">
+
+    <h1 class="result-heading">
+        AI Resume Analysis Dashboard
+    </h1>
+
+    <div class="result-grid">
+
+        <section class="score-card">
+            <h2>Skill Match</h2>
+            <div class="score">{{ score }}%</div>
+            <div class="progress">
+                <div class="progress-fill"
+                     data-width="{{ score }}">
+                </div>
+            </div>
+            <p>Required skills found in your resume</p>
+        </section>
+
+        <section class="score-card">
+            <h2>AI Text Similarity</h2>
+            <div class="score">{{ ai_similarity }}%</div>
+            <div class="progress">
+                <div class="progress-fill ai-fill"
+                     data-width="{{ ai_similarity }}">
+                </div>
+            </div>
+            <p>Text similarity between resume and job description</p>
+        </section>
+
+    </div>
+
+    <section class="result-grid">
+
+        <div class="result-card">
+            <h2>Matched Skills</h2>
+
+            {% for skill in matched %}
+                <span class="skill-tag green">
+                    {{ skill }}
+                </span>
+            {% else %}
+                <p>No matched skills found.</p>
+            {% endfor %}
+        </div>
+
+       <div class="result-card">
+    <h2>Missing Skills</h2>
+
+    {% for skill in missing %}
+        <span class="skill-tag red">
+            {{ skill }}{{ "," if not loop.last else "" }}
+        </span>
+    {% else %}
+        <p>No missing skills found.</p>
+    {% endfor %}
+       </div>
+
+    </section>
+
+    <section class="result-card">
+        <h2>Skills Identified in Resume</h2>
+
+        {% for skill in resume_skills %}
+            <span class="skill-tag blue">
+                {{ skill }}
+            </span>
+        {% else %}
+            <p>No recognized skills found.</p>
+        {% endfor %}
+    </section>
+    
+    
+<section class="result-card">
+    <h2>Resume Section Analysis</h2>
+
+    <p>Check whether your resume includes important sections.</p>
+
+    {% for section, found in resume_sections.items() %}
+        <p>
+            {% if found %}
+                <span class="skill-tag green">✓ Present</span>
+            {% else %}
+                <span class="skill-tag red">✗ Missing</span>
+            {% endif %}
+
+            <strong>{{ section }}</strong>
+        </p>
+    {% endfor %}
+</section>
+
+
+<section class="score-card">
+
+    <h2>Resume Quality Indicator</h2>
+
+    <div class="score">
+        {{ resume_quality }}%
+    </div>
+
+    <div class="progress">
+        <div class="progress-fill"
+               data-width="{{ resume_quality }}">
+        </div>
+    </div>
+
+    <h3>Improvement Suggestions</h3>
+
+    {% for suggestion in quality_suggestions %}
+        <p>💡 {{ suggestion }}</p>
+    {% endfor %}
+
+</section>
+
+
+    <section class="recommendation-card">
+        <h2>AI Skill Recommendations</h2>
+
+        {% for item in recommendations %}
+            <p>💡 {{ item }}</p>
+        {% else %}
+            <p>You have all the recognized skills listed in this job description.</p>
+        {% endfor %}
+    </section>
+
+    <p class="note">
+        Note: Skill Match measures listed skill coverage.
+        AI Text Similarity measures textual similarity.
+        Neither score guarantees job suitability.
+    </p>
+
+    <a href="/" class="back-button">
+        Analyse Another Resume
+    </a>
+
+</main>
+
+<footer>
+    AI Resume Job Skill Analyser | College Project
+</footer>
+
+<script>
+    document.querySelectorAll(".progress-fill[data-width]").forEach(function (bar) {
+        const width = Math.max(0, Math.min(100, Number(bar.dataset.width) || 0));
+        bar.style.width = width + "%";
+    });
+</script>
+
+<form action="/download-report" method="POST">
+
+    <input type="hidden" name="score"
+           value="{{ score }}">
+
+    <input type="hidden" name="ai_similarity"
+           value="{{ ai_similarity }}">
+
+    <input type="hidden" name="quality_score"
+           value="{{ quality_score }}">
+
+    <input type="hidden" name="matched"
+           value="{{ matched | join(', ') }}">
+
+    <input type="hidden" name="missing"
+           value="{{ missing | join(', ') }}">
+
+    <button type="submit" class="download-btn">
+        📥 Download Analysis Report
+    </button>
+
+</form>
+
+</body>
+</html>
